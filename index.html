@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Shark Fun Facts</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+      background: #ffffff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    h1 {
+      color: #2a5d84;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: #3a7ca5;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    .shark-name {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 20px 0 10px;
+      color: #2a5d84;
+    }
+    .fun-facts {
+      list-style-type: disc;
+      margin-left: 20px;
+      font-size: 18px;
+      color: #333;
+      text-align: left;
+      display: inline-block;
+    }
+    .refresh-text {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #555;
+    }
+    .shark-image {
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to John Shark</h1>
+    <h2>Here is your random John</h2>
+    <div id="sharkDisplay"></div>
+    <div class="refresh-text">Refresh for another john</div>
+  </div>
+  <script>
+    // Dictionary of 50 shark species and their fun facts.
+    const sharkDict = {
+      "Great White Shark": [
+        "They can detect one drop of blood in 25 gallons of water.",
+        "They can swim up to 35 mph.",
+        "They are known for their impressive size and power."
+      ],
+      "Tiger Shark": [
+        "They have stripes that fade as they mature.",
+        "They are known as the garbage cans of the sea due to their diet.",
+        "They are found in tropical and subtropical waters."
+      ],
+      "Hammerhead Shark": [
+        "Their unique head shape improves their vision.",
+        "They use their wide-set eyes for nearly 360-degree vision.",
+        "They often travel in schools during the day."
+      ],
+      "Bull Shark": [
+        "They can thrive in both saltwater and freshwater.",
+        "They are known for their aggressive behavior.",
+        "They are often found in warm, shallow coastal waters."
+      ],
+      "Whale Shark": [
+        "They are the largest fish in the sea.",
+        "They are gentle giants that feed on plankton.",
+        "They sport a unique pattern of white spots."
+      ],
+      "Mako Shark": [
+        "They are among the fastest sharks, reaching speeds over 45 mph.",
+        "They are known for their agility and powerful build.",
+        "They are prized by sport fishermen."
+      ],
+      "Nurse Shark": [
+        "They are mostly nocturnal and rest during the day.",
+        "They have a slow, sedentary lifestyle.",
+        "They use their pectoral fins to 'walk' along the ocean floor."
+      ],
+      "Lemon Shark": [
+        "They are named for their yellowish skin tone.",
+        "They often form social groups in shallow waters.",
+        "They are found in subtropical regions."
+      ],
+      "Blacktip Shark": [
+        "They are easily recognizable by the black tips on their fins.",
+        "They are common in warm, shallow waters.",
+        "They are known for their energetic behavior."
+      ],
+      "Blue Shark": [
+        "They have a slender body and pointed snout.",
+        "They are one of the most migratory shark species.",
+        "They primarily feed on fish and squid."
+      ],
+      "Sand Tiger Shark": [
+        "They have a menacing appearance despite their docile nature.",
+        "They exhibit intrauterine cannibalism during development.",
+        "They are often found near sandy ocean bottoms."
+      ],
+      "Oceanic Whitetip Shark": [
+        "They have long, white-tipped fins and are found in open oceans.",
+        "They are curious and often approach boats.",
+        "They have been observed following ships for extended periods."
+      ],
+      "Thresher Shark": [
+        "They use their long tail to stun prey.",
+        "They have one of the most distinctive silhouettes among sharks.",
+        "They can be found in both coastal and open ocean waters."
+      ],
+      "Zebra Shark": [
+        "They have striking patterns that change as they age.",
+        "They are mostly nocturnal and feed on mollusks.",
+        "They are native to Indo-Pacific waters."
+      ],
+      "Basking Shark": [
+        "They are the second-largest fish in the ocean.",
+        "They are filter feeders that consume vast amounts of plankton.",
+        "They are often seen near the surface, 'basking' in the sun."
+      ],
+      "Greenland Shark": [
+        "They are one of the longest-living vertebrates.",
+        "They inhabit the cold waters of the North Atlantic.",
+        "They have a very slow metabolism and may live for centuries."
+      ],
+      "Angel Shark": [
+        "They have a flat, broad body similar to rays.",
+        "They camouflage themselves on the ocean floor.",
+        "They are ambush predators waiting for prey to approach."
+      ],
+      "Reef Shark": [
+        "They are commonly found around coral reefs.",
+        "They help maintain the health of reef ecosystems.",
+        "They are popular in ecotourism and diving experiences."
+      ],
+      "Port Jackson Shark": [
+        "They sport a distinct hammer-like head.",
+        "They are known to rest in dens during the day.",
+        "They have unique and interesting mating behaviors."
+      ],
+      "Wobbegong Shark": [
+        "They have a textured appearance that aids in camouflage.",
+        "They are ambush predators relying on stealth.",
+        "They are found in the shallow waters of the Indo-Pacific."
+      ],
+      "Catshark": [
+        "They are generally small and mostly nocturnal.",
+        "Their eyes resemble those of cats, which inspired their name.",
+        "They can be found in temperate and tropical waters worldwide."
+      ],
+      "Bamboo Shark": [
+        "They are named for their slender body shape reminiscent of bamboo.",
+        "They are often found in coral reef environments.",
+        "They are known for their docile behavior in captivity."
+      ],
+      "Cookiecutter Shark": [
+        "They are one of the few bioluminescent shark species.",
+        "They leave distinctive round bite marks on larger animals.",
+        "They feed by gouging out small plugs of flesh."
+      ],
+      "Whitetip Reef Shark": [
+        "They are a common sight for divers around coral reefs.",
+        "Their white-tipped fins make them easily identifiable.",
+        "They tend to be territorial and are often seen in groups."
+      ],
+      "Dusky Shark": [
+        "They are known for their smooth, streamlined bodies.",
+        "They prefer deep, offshore waters.",
+        "They are occasionally caught as bycatch in commercial fisheries."
+      ],
+      "Blacktip Reef Shark": [
+        "They are one of the most common sharks on coral reefs.",
+        "They exhibit social behaviors, often swimming in groups.",
+        "They play a key role in reef ecosystem balance."
+      ],
+      "Silky Shark": [
+        "They have a smooth, streamlined body ideal for fast swimming.",
+        "They are typically found in deep offshore waters.",
+        "They often form large groups near seamounts."
+      ],
+      "Spinner Shark": [
+        "They are known for their acrobatic leaps out of the water.",
+        "They spin their bodies while breaching.",
+        "They inhabit tropical and subtropical regions."
+      ],
+      "Shortfin Mako Shark": [
+        "They are one of the fastest sharks in the ocean.",
+        "They are highly prized by sport fishermen.",
+        "They feature a sleek body with a pointed snout."
+      ],
+      "Longfin Mako Shark": [
+        "They have longer pectoral fins compared to shortfin makos.",
+        "They are renowned for their speed and agility.",
+        "They are found in both temperate and tropical waters."
+      ],
+      "Galapagos Shark": [
+        "They are abundant around the Galapagos Islands.",
+        "They display bold behavior when encountering divers.",
+        "They play an important role in the local marine ecosystem."
+      ],
+      "Caribbean Reef Shark": [
+        "They are native to the Caribbean Sea.",
+        "They are commonly observed in shallow reef environments.",
+        "They are a favorite subject for underwater photography."
+      ],
+      "Bonnethead Shark": [
+        "They are a small type of hammerhead with a 'bonnet-like' head.",
+        "They are one of the few shark species that feed on seagrass.",
+        "They are found in coastal waters."
+      ],
+      "Dogfish Shark": [
+        "They are small and agile with a robust nature.",
+        "They are often used in marine research studies.",
+        "They can be found in both Atlantic and Pacific waters."
+      ],
+      "Spiny Dogfish": [
+        "They have sharp spines located in front of their dorsal fins.",
+        "They are among the longest-living shark species.",
+        "They undertake long seasonal migrations."
+      ],
+      "Swell Shark": [
+        "They can inflate their bodies to deter predators.",
+        "They possess a robust body with thick skin.",
+        "They are typically found in temperate waters."
+      ],
+      "Epaulette Shark": [
+        "They are named for the shoulder-like markings on their bodies.",
+        "They can survive in low-oxygen environments.",
+        "They inhabit shallow, tropical waters."
+      ],
+      "Angular Rough Shark": [
+        "They have a rough, textured skin that helps with camouflage.",
+        "Their angular shape aids in blending into rocky habitats.",
+        "They are lesser-known but exhibit fascinating behaviors."
+      ],
+      "Dwarf Lanternshark": [
+        "They are the smallest known shark species.",
+        "They possess bioluminescent properties.",
+        "They live in deep-sea environments."
+      ],
+      "Pacific Sleeper Shark": [
+        "They are one of the largest sleeper sharks.",
+        "They prefer the deep, cold waters of the Pacific.",
+        "They are slow-moving and elusive."
+      ],
+      "Scalloped Hammerhead": [
+        "They feature a distinctive scalloped shape on the edges of their head.",
+        "They are known to form large schools during the day.",
+        "They are considered vulnerable due to overfishing."
+      ],
+      "Smalleye Hammerhead": [
+        "They have smaller eyes compared to other hammerhead species.",
+        "They are adapted to low-light deep water environments.",
+        "They are found near continental shelves."
+      ],
+      "Winghead Shark": [
+        "They possess an extremely wide, wing-like head.",
+        "Their unique head structure enhances sensory perception.",
+        "They are typically found in shallow coastal areas."
+      ],
+      "Leopard Shark": [
+        "They have distinctive spotted patterns on their skin.",
+        "They are common along parts of the Pacific coast.",
+        "They are popular with divers and snorkelers."
+      ],
+      "Sandbar Shark": [
+        "They are one of the most common sharks in shallow waters.",
+        "They have a broad, flat snout and robust build.",
+        "They are often found in bays and estuaries."
+      ],
+      "Roughskin Shark": [
+        "They have a uniquely rough, sandpaper-like skin.",
+        "They primarily inhabit deeper waters.",
+        "They remain one of the lesser-studied shark species."
+      ],
+      "Longnose Shark": [
+        "They feature an elongated snout ideal for detecting prey.",
+        "They are found in temperate coastal waters.",
+        "They possess a streamlined body shape."
+      ],
+      "Speartooth Shark": [
+        "They are noted for their distinctive, serrated teeth.",
+        "They are found in deep ocean habitats.",
+        "They have an exceptionally powerful bite."
+      ],
+      "Pygmy Shark": [
+        "They rank among the smallest of shark species.",
+        "They are rarely seen due to their deep-sea habitat.",
+        "They exhibit a unique, compact body design."
+      ],
+      "Whitecheek Shark": [
+        "They have a light-colored cheek area that stands out.",
+        "They are known for their agility and speed.",
+        "They inhabit tropical marine environments."
+      ]
+    };
+
+    // Function to convert a species name into a corresponding image filename.
+    function getImageFilename(species) {
+      // Remove all spaces
+      let filename = species.replace(/\s+/g, '');
+      // Remove the word "Shark" (case insensitive) if it appears.
+      filename = filename.replace(/shark/i, '');
+      return `images/${filename}.jpeg`;
+    }
+
+    // Function to display a random shark, its image, and fun facts.
+    function displayRandomShark() {
+      const species = Object.keys(sharkDict);
+      const randomSpecies = species[Math.floor(Math.random() * species.length)];
+      const facts = sharkDict[randomSpecies];
+      const imgURL = getImageFilename(randomSpecies);
+
+      let output = `<div class="shark-name">${randomSpecies}</div>`;
+      output += `<img class="shark-image" src="${imgURL}" alt="${randomSpecies}">`;
+      output += "<ul class='fun-facts'>";
+      facts.forEach(fact => {
+        output += `<li>${fact}</li>`;
+      });
+      output += "</ul>";
+      
+      document.getElementById("sharkDisplay").innerHTML = output;
+    }
+
+    // Display a random shark when the page loads.
+    window.onload = displayRandomShark;
+  </script>
+</body>
+</html>
